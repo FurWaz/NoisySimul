@@ -1,51 +1,19 @@
 #include <iostream>
-#include <glad/glad.h>
-#include <GLFW/glfw3.h>
+#include "Window.hpp"
+
+#define CLEAR_COLOR Color(0.2f, 0.3f, 0.3f, 1.0f)
 
 int main(int argc, char const *argv[])
 {
-    // Initialize GLFW
-    if (!glfwInit())
-    {
-        std::cerr << "Failed to initialize GLFW" << std::endl;
-        return -1;
-    }
+    Window window(800, 600, "NoisySimul");
 
-    // Create a window
-    GLFWwindow* window = glfwCreateWindow(800, 600, "Hello World", nullptr, nullptr);
-    if (!window)
+    while (!window.ShouldClose())
     {
-        std::cerr << "Failed to create GLFW window" << std::endl;
-        glfwTerminate();
-        return -1;
-    }
-
-    // Make the window's context current
-    glfwMakeContextCurrent(window);
-
-    if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
-    {
-        std::cerr << "Failed to initialize GLAD" << std::endl;
-        glfwTerminate();
-        return -1;
-    }
-
-    // Loop until the user closes the window
-    while (!glfwWindowShouldClose(window))
-    {
-        // Poll for and process events
         glfwPollEvents();
 
-        // Clear render
-        glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
-        glClear(GL_COLOR_BUFFER_BIT);
-        
-
-        // Swap front and back buffers
-        glfwSwapBuffers(window);
+        window.Clear(CLEAR_COLOR);
+        window.SwapBuffers();
     }
 
-    // Clean up
-    glfwTerminate();
     return 0;
 }
