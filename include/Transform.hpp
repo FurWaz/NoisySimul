@@ -5,8 +5,8 @@
 class Transform
 {
 public:
-    Transform();
-    virtual ~Transform();
+    Transform() {}
+    virtual ~Transform() {}
 
     glm::vec3 getPosition() const { return m_position; }
     void setPosition(const glm::vec3& position) { m_position = position; updateMatrix(); }

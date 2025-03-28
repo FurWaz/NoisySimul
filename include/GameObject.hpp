@@ -11,8 +11,9 @@ public:
 
     const std::string& GetName() const { return name; }
     void SetName(const std::string& name) { this->name = name; }
-    
+
     Transform& GetTransform() { return m_transform; }
+    void SetTransform(const Transform& transform) { m_transform = transform; }
 
 private:
     std::string name;

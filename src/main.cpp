@@ -9,9 +9,11 @@ int main(int argc, char const *argv[])
 
     while (!window.ShouldClose())
     {
-        glfwPollEvents();
+        window.PollEvents();
+        window.BeginImGui();
 
         window.Clear(CLEAR_COLOR);
+        window.RenderImGui();
         window.SwapBuffers();
     }
 

@@ -1,5 +1,6 @@
 #include "Window.hpp"
 #include <iostream>
+#include "Style.hpp"
 
 Window::Window(int width, int height, std::string title)
 {
@@ -28,6 +29,19 @@ Window::Window(int width, int height, std::string title)
         glfwTerminate();
         return;
     }
+
+    // Initialize ImGui
+    IMGUI_CHECKVERSION();
+    ImGui::CreateContext();
+    ImGuiIO& io = ImGui::GetIO(); (void)io;
+    io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;     // Enable Keyboard Controls
+    io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;      // Enable Gamepad Controls
+    ImGui::StyleColorsDark();
+
+    ImGui_ImplGlfw_InitForOpenGL(m_window, true);
+    ImGui_ImplOpenGL3_Init("#version 130");
+
+    applyCustomImGuiStyle(ImGui::GetStyle());
 }
 
 Window::~Window()
@@ -36,8 +50,34 @@ Window::~Window()
     glfwTerminate();
 }
 
+void Window::PollEvents()
+{
+    glfwPollEvents();
+    // if (glfwGetWindowAttrib(m_window, GLFW_ICONIFIED))
+    // {
+    //     ImGui_ImplGlfw_Sleep(10); // sleep 10ms if window is minimized
+    // }
+}
+
+void Window::BeginImGui()
+{
+    ImGui_ImplOpenGL3_NewFrame();
+    ImGui_ImplGlfw_NewFrame();
+    ImGui::NewFrame();
+}
+
+void Window::RenderImGui()
+{
+    ImGui::Render();
+    ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+}
+
 void Window::Clear(const Color& color)
 {
+    int display_w, display_h;
+    glfwGetFramebufferSize(m_window, &display_w, &display_h);
+    glViewport(0, 0, display_w, display_h);
+
     glClearColor(color.r, color.g, color.b, color.a);
     glClear(GL_COLOR_BUFFER_BIT);
 }
